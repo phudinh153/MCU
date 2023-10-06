@@ -58,33 +58,6 @@ static void MX_TIM2_Init(void);
 /* USER CODE BEGIN 0 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
-typedef enum State {One, Two, Three, Four} EState;
-void tswitch (EState state) {
-	if (state == One) {
-		HAL_GPIO_WritePin(EN_0_GPIO_Port,EN_0_Pin, 0);
-		HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 1);
-		HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 1);
-		HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 1);
-	}
-	if (state == Two){
-		HAL_GPIO_WritePin(EN_0_GPIO_Port, EN_0_Pin, 1);
-		HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 0);
-		HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 1);
-		HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 1);
-	}
-	if (state == Three){
-			HAL_GPIO_WritePin(EN_0_GPIO_Port, EN_0_Pin, 1);
-			HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 1);
-			HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 0);
-			HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 1);
-		}
-	if (state == Four){
-			HAL_GPIO_WritePin(EN_0_GPIO_Port, EN_0_Pin, 1);
-			HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 1);
-			HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 1);
-			HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 0);
-		}
-}
 /* USER CODE END 0 */
 
 /**
@@ -125,8 +98,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	 HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-	 HAL_Delay(1000);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -255,39 +227,21 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 int counter = 50;
-int ledStatus = One;
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (counter > 0) {
-        counter--;
-    }
-    if (counter == 0) {
-    		switch(ledStatus) {
-    		case One:
-    			tswitch(One);
-    			Display7Seg(1);
-    			ledStatus = Two;
-    			break;
-    		case Two:
-    			tswitch(Two);
-    			Display7Seg(2);
-    			ledStatus = Three;
-    			break;
-    		case Three:
-    			tswitch(Three);
-    			Display7Seg(3);
-    			ledStatus = Four;
-    			break;
-    		case Four:
-    			tswitch(Four);
-    			Display7Seg(0);
-    			ledStatus = One;
-    			break;
-    		default:
-    			ledStatus = One;
-    			break;
-    		}
-    		counter = 50;
-    	}
+int index_led = 0;
+int led_single = 0;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if (counter >= 0) {
+		counter--;
+	}
+	if (counter == 0) {
+		update7SEG(index_led++);
+		counter = 50;
+	}
+	led_single++;
+	if (led_single == 2) {
+		HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
+		led_single = 0;
+	}
 }
 /* USER CODE END 4 */
 

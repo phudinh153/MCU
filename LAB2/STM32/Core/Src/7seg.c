@@ -1,9 +1,3 @@
-/*
- * 7seg.c
- *
- *  Created on: Oct 30, 2022
- *      Author: hp
- */
 #include "main.h"
 
 void Display7Seg(int num){
@@ -100,6 +94,66 @@ void Display7Seg(int num){
 		break;
 	default:
 		break;
+	}
+}
+
+typedef enum State {One, Two, Three, Four} EState;
+void tswitch (EState state) {
+	if (state == One) {
+		HAL_GPIO_WritePin(EN_0_GPIO_Port,EN_0_Pin, 0);
+		HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 1);
+		HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 1);
+		HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 1);
+	}
+	if (state == Two){
+		HAL_GPIO_WritePin(EN_0_GPIO_Port, EN_0_Pin, 1);
+		HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 0);
+		HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 1);
+		HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 1);
+	}
+	if (state == Three){
+			HAL_GPIO_WritePin(EN_0_GPIO_Port, EN_0_Pin, 1);
+			HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 1);
+			HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 0);
+			HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 1);
+		}
+	if (state == Four){
+			HAL_GPIO_WritePin(EN_0_GPIO_Port, EN_0_Pin, 1);
+			HAL_GPIO_WritePin(EN_1_GPIO_Port, EN_1_Pin, 1);
+			HAL_GPIO_WritePin(EN_2_GPIO_Port, EN_2_Pin, 1);
+			HAL_GPIO_WritePin(EN_3_GPIO_Port, EN_3_Pin, 0);
+		}
+}
+
+const int MAX_LED = 4;
+int led_buffer [4] = {1, 2, 3, 4};
+void update7SEG ( int index ){
+	int flag = index%4;
+	switch (flag){
+	case 0:
+		tswitch(One);
+		Display7Seg(led_buffer[flag]);
+		flag = 1;
+		break;
+	 case 1:
+		tswitch(Two);
+		Display7Seg(led_buffer[flag]);
+		flag = 2;
+		break ;
+	 case 2:
+		tswitch(Three);
+		Display7Seg(led_buffer[flag]);
+		flag = 3;
+		break ;
+	 case 3:
+		tswitch(Four);
+		Display7Seg(led_buffer[flag]);
+		flag = 4;
+		break ;
+	 default :
+		tswitch(One);
+		Display7Seg(led_buffer[index]);
+		break ;
 	}
 }
 
