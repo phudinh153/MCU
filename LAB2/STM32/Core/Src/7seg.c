@@ -1,4 +1,4 @@
-#include "main.h"
+#include "7seg.h"
 
 void Display7Seg(int num){
 	switch (num) {
@@ -97,7 +97,6 @@ void Display7Seg(int num){
 	}
 }
 
-typedef enum State {One, Two, Three, Four} EState;
 void tswitch (EState state) {
 	if (state == One) {
 		HAL_GPIO_WritePin(EN_0_GPIO_Port,EN_0_Pin, 0);
@@ -157,3 +156,9 @@ void update7SEG ( int index ){
 	}
 }
 
+void updateClockBuffer(int hour, int minute){
+	led_buffer[0] = hour / 10;
+	led_buffer[1] = hour % 10;
+	led_buffer[2] = minute / 10;
+	led_buffer[3] = minute % 10;
+}

@@ -1,3 +1,4 @@
 7seg.c:3:6:Display7Seg	16	static
-7seg.c:101:6:tswitch	16	static
-7seg.c:130:6:update7SEG	24	static
+7seg.c:100:6:tswitch	16	static
+7seg.c:129:6:update7SEG	24	static
+7seg.c:159:6:updateClockBuffer	16	static
