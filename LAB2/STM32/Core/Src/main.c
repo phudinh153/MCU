@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "7seg.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -226,21 +227,24 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter = 50;
+int counter = 25;
 int index_led = 0;
-int led_single = 0;
+int led_single = 100;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if (counter >= 0) {
 		counter--;
 	}
 	if (counter == 0) {
 		update7SEG(index_led++);
-		counter = 50;
+		counter = 25;
 	}
-	led_single++;
-	if (led_single == 2) {
+
+	if (led_single == 0) {
 		HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
-		led_single = 0;
+		led_single = 100;
+	}
+	else {
+		led_single--;
 	}
 }
 /* USER CODE END 4 */
