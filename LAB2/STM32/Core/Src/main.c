@@ -101,7 +101,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   int counterDOT = 0;
-  int hour = 15, minute = 8, second = 50;
+  int hour = 18, minute = 7, second = 39;
   setTimer0(1000);
   while (1)
   {
@@ -125,7 +125,7 @@ int main(void)
 		  second++;
 
 		  counterDOT++;
-		  if (counterDOT == 2) {
+		  if (counterDOT == 1) {
 			  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
 			  counterDOT = 0;
 		  }
