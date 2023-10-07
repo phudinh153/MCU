@@ -5,9 +5,11 @@ extern int timer0_flag;
 extern int timer1_flag;
 extern int timer2_flag;
 extern int timer3_flag;
+extern int timer4_flag;
 extern int timer1_counter;
 extern int timer2_counter;
 extern int timer3_counter;
+extern int timer4_counter;
 extern int TIMER_CYCLE;
 
 void setTimer0 ( int duration ){
@@ -29,6 +31,11 @@ void setTimer3 ( int duration ) {
 	timer3_flag = 0;
 }
 
+void setTimer4 ( int duration ) {
+	timer4_counter = duration / TIMER_CYCLE ;
+	timer4_flag = 0;
+}
+
 void timer_run (){
 	if( timer0_counter > 0){
 		timer0_counter --;
@@ -48,6 +55,10 @@ void timer_run (){
 		timer3_counter--;
 		if ( timer3_counter == 0) timer3_flag = 1;
 	}
+	if ( timer4_counter > 0) {
+			timer4_counter--;
+			if ( timer4_counter == 0) timer4_flag = 1;
+		}
 }
 
 int checkFlag0(){

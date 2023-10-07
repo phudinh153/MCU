@@ -34,6 +34,9 @@ int timer2_flag = 0;
 int timer3_counter = 0;
 int timer3_flag = 0;
 
+int timer4_counter = 0;
+int timer4_flag = 0;
+
 int TIMER_CYCLE = 10;
 /* USER CODE END Includes */
 
@@ -225,6 +228,13 @@ void updateLEDMatrix(int index) {
 	displayLEDMatrix(matrix_buffer[index]);
 }
 
+void shiftLeft() {
+	uint8_t first = matrix_buffer[0];
+	for (int i = 0; i < 7; ++i) {
+		matrix_buffer[i] = matrix_buffer[i+1];
+	}
+	matrix_buffer[7] = first;
+}
 /* USER CODE END 0 */
 
 /**
@@ -271,6 +281,7 @@ int main(void)
   setTimer1(100); //timer for 4 LED 7SEG, switch every 250ms
   setTimer2(100); //timer for colon, display every 500ms
   setTimer3(100);
+  setTimer4(100);
 
   matrix_buffer[0] = 0x00;
   matrix_buffer[1] = 0xc0;
@@ -319,6 +330,10 @@ int main(void)
 		  updateLEDMatrix(index_led_matrix++);
 		  if (index_led_matrix >= 8) index_led_matrix = 0;
 		  setTimer3(50);
+	  }
+	  if ( timer4_flag == 1) {
+	  		  shiftLeft();
+	  		  setTimer4(8*50);
 	  }
     /* USER CODE BEGIN 3 */
   }
